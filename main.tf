@@ -17,18 +17,25 @@ variable "server_port" {
 }
 #
 #
+### Data Sources ###
+#
+# AZs
+#
+data "aws_availability_zones" "all" {}
+#
+#
 ### Resources ###
 #
 #
-# set an instance resource
+# set a launch configuration resource for instances
 #
-resource "aws_instance" "example" {
-  ami		= "ami-40d28157"
+resource "aws_launch_configuration" "LCExample" {
+  image_id	= "ami-40d28157"
   instance_type = "t2.micro"
 
-  tags {
-    Name = "terraform-example"
-  }
+###  tag {
+###    Name = "Launch Configuration Example"
+###  }
 
   user_data = <<-EOF
 		#!/bin/bash
@@ -36,7 +43,11 @@ resource "aws_instance" "example" {
 		nohup busybox httpd -f -p "${var.server_port}" &
 		EOF
 
-  vpc_security_group_ids = ["${aws_security_group.WebServerSecurityGroup.id}"]
+  security_groups = ["${aws_security_group.WebServerSecurityGroup.id}"]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 #
 # Add a security group to allow inbound 8080 connections
@@ -50,6 +61,26 @@ resource "aws_security_group" "WebServerSecurityGroup" {
     protocol	= "tcp"
     cidr_blocks	= ["0.0.0.0/0"]
   }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+#
+# Auto Scaling Group #
+#
+resource "aws_autoscaling_group" "ASGExample" {
+  launch_configuration = "${aws_launch_configuration.LCExample.id}"
+  availability_zones   = ["${data.aws_availability_zones.all.names}"]
+
+  min_size = 2
+  max_size = 10
+  desired_capacity = 4
+
+  tags {
+    key			= "Name"
+    value		= "Terraform Auto Scaling Group example"
+    propagate_at_launch	= true
+  }
 }
 #
 #
@@ -58,9 +89,9 @@ resource "aws_security_group" "WebServerSecurityGroup" {
 #
 # Instance public IP address #
 #
-output "Public IP" {
-  value = "${aws_instance.example.public_ip}"
-}
+###output "Public IP" {
+###  value = "${aws_instances.LCExample.public_ip}"
+###}
 #
 # end #
- 
+
