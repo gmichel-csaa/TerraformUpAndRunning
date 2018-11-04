@@ -21,13 +21,13 @@ resource "aws_instance" "example" {
 		nohup busybox httpd -f -p 8080 &
 		EOF
 
-  vpc_security_group_ids = ["${aws_security_group.instance.id}"]
+  vpc_security_group_ids = ["${aws_security_group.WebServerSecurityGroup.id}"]
 }
 #
 # Add a security group to allow inbound 8080 connections
 #
-resource "aws_security_group" "instance" {
-  name = "terraform-example-instance"
+resource "aws_security_group" "WebServerSecurityGroup" {
+  name = "Web Server Security Group"
 
   ingress {
     from_port	= 8080
