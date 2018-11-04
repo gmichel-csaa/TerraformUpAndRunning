@@ -1,9 +1,24 @@
 #
-# Set provider
+### Set provider ###
 #
 provider "aws" {
   region = "us-east-1"
 }
+#
+#
+### Variables ###
+#
+#
+# set server port #
+#
+variable "server_port" {
+  description = "The port the web server will use in this example for HTTP requests"
+  default = 8080
+}
+#
+#
+### Resources ###
+#
 #
 # set an instance resource
 #
@@ -18,7 +33,7 @@ resource "aws_instance" "example" {
   user_data = <<-EOF
 		#!/bin/bash
 		echo "Hello World" > index.html
-		nohup busybox httpd -f -p 8080 &
+		nohup busybox httpd -f -p "${var.server_port}" &
 		EOF
 
   vpc_security_group_ids = ["${aws_security_group.WebServerSecurityGroup.id}"]
@@ -30,10 +45,22 @@ resource "aws_security_group" "WebServerSecurityGroup" {
   name = "Web Server Security Group"
 
   ingress {
-    from_port	= 8080
-    to_port	= 8080
+    from_port	= "${var.server_port}"
+    to_port	= "${var.server_port}"
     protocol	= "tcp"
     cidr_blocks	= ["0.0.0.0/0"]
   }
 }
-
+#
+#
+### Outputs ###
+#
+#
+# Instance public IP address #
+#
+output "Public IP" {
+  value = "${aws_instance.example.public_ip}"
+}
+#
+# end #
+ 
