@@ -68,11 +68,11 @@ resource "aws_security_group" "WebServerSecurityGroup" {
 #
 # Auto Scaling Group #
 #
-resource "aws_autoscaling_group" "AutoScalingGroupExample" {
-  launch_configuration	= "${aws_launch_configuration.LaunchConfigurationExample.id}"
+resource "aws_autoscaling_group" "AutoScalingGroup" {
+  launch_configuration	= "${aws_launch_configuration.LaunchConfiguration.id}"
   availability_zones	= ["${data.aws_availability_zones.all.names}"]
 
-  load_balancers	= ["${aws_elb.ElasticLoadBalancerExample}"]
+  load_balancers	= ["${aws_elb.ElasticLoadBalancer.name}"]
   health_check_type	= "ELB"
 
   min_size = 2
@@ -88,7 +88,7 @@ resource "aws_autoscaling_group" "AutoScalingGroupExample" {
 #
 # Elastic Load Balancer #
 #
-resource "aws_elb" "ElasticLoadBalancerExample" {
+resource "aws_elb" "ElasticLoadBalancer" {
   name			= "Terraform Auto Scaler Group"
   availability_zones	= ["${data.aws_availability_zones.all.names}"]
   security_groups	= ["${aws_security_group.elb.id}"] ## this associates the ELB with its security group
