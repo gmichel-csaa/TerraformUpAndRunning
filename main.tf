@@ -13,21 +13,21 @@ resource "aws_instance" "example" {
 
   tags {
     Name = "terraform-example"
+  }
 
-  user-data = <<-EOF
+  user_data = <<-EOF
 		#!/bin/bash
 		echo "Hello World" > index.html
 		nohup busybox httpd -f -p 8080 &
 		EOF
 
   vpc_security_group_ids = ["{aws_security_group.instance.id}"]
-  }
 }
 #
 # Add a security group to allow inbound 8080 connections
 #
 resource "aws_security_group" "instance" {
-  name = "terraform example instance SG"
+  name = "terraform-example-instance"
 
   ingress {
     from_port	= 8080
