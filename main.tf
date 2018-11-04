@@ -68,8 +68,8 @@ resource "aws_security_group" "WebServerSecurityGroup" {
 #
 # Auto Scaling Group #
 #
-resource "aws_autoscaling_group" "ASGExample" {
-  launch_configuration = "${aws_launch_configuration.LCExample.id}"
+resource "aws_autoscaling_group" "AutoScalingGroupExample" {
+  launch_configuration = "${aws_launch_configuration.LaunchConfigurationExample.id}"
   availability_zones   = ["${data.aws_availability_zones.all.names}"]
 
   min_size = 2
@@ -90,7 +90,7 @@ resource "aws_autoscaling_group" "ASGExample" {
 # Instance public IP address #
 #
 ###output "Public IP" {
-###  value = "${aws_instances.LCExample.public_ip}"
+###  value = "${aws_instances.LaunchConfigurationExample.public_ip}"
 ###}
 #
 # end #
