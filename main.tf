@@ -89,7 +89,7 @@ resource "aws_autoscaling_group" "AutoScalingGroup" {
 # Elastic Load Balancer #
 #
 resource "aws_elb" "ElasticLoadBalancer" {
-  name			= "Terraform Auto Scaler Group"
+  name			= "TerraformElasticLoadBalancer"
   availability_zones	= ["${data.aws_availability_zones.all.names}"]
   security_groups	= ["${aws_security_group.elb.id}"] ## this associates the ELB with its security group
  
@@ -104,7 +104,7 @@ resource "aws_elb" "ElasticLoadBalancer" {
     healthy_threshold	= 2
     unhealthy_threshold = 2
     timeout		= 3
-    inverval		= 30
+    interval		= 30
     target		= "HTTP:${var.server_port}/"
   }
 }
