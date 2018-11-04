@@ -87,8 +87,9 @@ resource "aws_autoscaling_group" "AutoScalingGroupExample" {
 }
 #
 # Elastic Load Balancer #
+#
 resource "aws_elb" "ElasticLoadBalancerExample" {
-  name			= "terraform-asg.example"
+  name			= "Terraform Auto Scaler Group"
   availability_zones	= ["${data.aws_availability_zones.all.names}"]
   security_groups	= ["${aws_security_group.elb.id}"] ## this associates the ELB with its security group
  
@@ -111,7 +112,7 @@ resource "aws_elb" "ElasticLoadBalancerExample" {
 ## Security group for the elastic load balancer ##
 #
 resource "aws_security_group" "elb" {
-  name = "terraform_example-elb"
+  name = "Security Group for ELB"
 
   ingress {
     from_port		= 80
