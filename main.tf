@@ -136,7 +136,7 @@ resource "aws_security_group" "elb" {
 # Instance public IP address / ELB DNS name #
 #
 output "Public IP" {
-  value = "${aws_elb.ElasticLoadBalancerExample.dns_name}"
+  value = "${aws_elb.ElasticLoadBalancer.dns_name}"
 }
 #
 # end #
