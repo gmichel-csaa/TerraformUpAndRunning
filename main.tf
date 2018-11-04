@@ -29,7 +29,7 @@ data "aws_availability_zones" "all" {}
 #
 # set a launch configuration resource for instances
 #
-resource "aws_launch_configuration" "LaunchConfigurationExample" {
+resource "aws_launch_configuration" "LaunchConfiguration" {
   image_id	= "ami-40d28157"
   instance_type = "t2.micro"
 
